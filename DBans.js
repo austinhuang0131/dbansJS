@@ -48,7 +48,7 @@
 
         dbans.lookup = function LookupID(id, callback) {
 
-            if (!dbans.bans.list) {discordbans.bans.update}
+            if (!dbans.bans.list) {dbans.update()}
             if (!callback) {
                 var toRET = JSON.stringify(dbans['list']).includes(id)
                 if (toRET.toString == true) {
