@@ -23,12 +23,12 @@
                 port: 443,
                 path: '/api',
                 method: 'GET',
-                headers: {'user-agent': 'DBansJS/1.0 (+https://deadplex.com/profile/kakol/#projects)'}
+                headers: {'user-agent': 'DBansJS/1.0 (+https://github.com/KakolIsSomewhatGay/dbansJS/)'}
             };
 
             var r = https.request(options, (res) => {
-                console.log('statusCode:', res.statusCode);
-                console.log('headers:', res.headers);
+                //console.log('statusCode:', res.statusCode);
+                //console.log('headers:', res.headers);
                 var ofString = ''
 
                 res.on('data', function (d) {
