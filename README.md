@@ -3,7 +3,7 @@ A Simple and easy way to lookup banned Discord users on DiscordBans
 
 **Updating the cache.** *Must be done on code start, recommended to update cache every two hours.*
 
-```dbans.update() // Blocking Event```
+```dbans.update() // Can be used with a callback.```
 
 **Looking up users.**
 
