@@ -8,3 +8,5 @@ A Simple and easy way to lookup banned Discord users on DiscordBans
 **Looking up users.**
 
 ```dbans.lookup( event.d.author.id )``` or ```dbans.lookup("123456789")```.
+
+*For Java developers theres a port in the works [Here!](https://github.com/Deadplex/DBansJava)*
