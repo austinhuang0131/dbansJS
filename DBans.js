@@ -15,7 +15,7 @@
             discordbans = dbans
         }
 
-        dbans.update = function LookupUDCache(id) {
+        dbans.update = function LookupUDCache(callback) {
 
             // Rather not use `const` to avoid having compat issues with N 6.x and earlier.
             var options = {
@@ -27,8 +27,6 @@
             };
 
             var r = https.request(options, (res) => {
-                //console.log('statusCode:', res.statusCode);
-                //console.log('headers:', res.headers);
                 var ofString = ''
 
                 res.on('data', function (d) {
@@ -37,6 +35,7 @@
 
                 res.on('end', function () {
                     dbans['list'] = ofString.replace(' ', '')
+                    try {if (callback !== undefined) {callback()}} catch(e){}
                 });
 
             });
@@ -50,7 +49,7 @@
 
             if (!dbans.bans.list) {dbans.update()}
             if (!callback) {
-                var toRET = JSON.stringify(dbans['list']).includes(id)
+                var toRET = JSON.stringify(dbans['list']).includes("['" + id + "']")
                 if (toRET.toString == true) {
                     return true
                 } else if (toRET.toString == false) {
@@ -58,15 +57,14 @@
                 } else {
                     return toRET
                 }
-
             } else if (callback) {
-                var toRET = JSON.stringify(dbans.bans.list).includes(id)
-                if (toRET.toString == true) {
-                    return true
-                } else if (toRET.toString == false) {
-                    return false
+                var toRET = JSON.stringify(dbans['list']).includes("['" + id + "']")
+                if (toRET.toString == "true") {
+                    callback(true)
+                } else if (toRET.toString == "false") {
+                    callback(false)
                 } else {
-                    return "Something went wrong :["
+                    callback(toRET)
                 }
             }            
         }
