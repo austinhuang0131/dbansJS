@@ -1,6 +1,6 @@
 {
   "name": "dbansjs",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A Simple and easy way to lookup banned Discord users on DiscordBans.",
   "main": "DBans.js",
   "scripts": {
