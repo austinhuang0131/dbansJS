@@ -5,7 +5,7 @@
 
         var https = require("https");
 
-        try { if (discordbans.toString == undefined) {
+        try { if (discordbans == undefined) {
             dbans = {}
             dbans.bans = {}
             discordbans = dbans
