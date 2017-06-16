@@ -3,7 +3,10 @@
     // Code is Licensed under MIT.
     // View here: https://choosealicense.com/licenses/mit/
 
-        var https = require("https");
+        //var https = require("https");       // I gave up with both of these options
+        //var qstri = require('querystring'); // so I'll just use needle instead
+        var needl = require('needle');
+        var version = "0.1.2" // For tracking
 
         try { if (discordbans == undefined) {
             dbans = {}
@@ -15,58 +18,45 @@
             discordbans = dbans
         }
 
-        dbans.update = function LookupUDCache(callback) {
+        dbans.update = function LookupUDCache(object, callback) {
 
-            // Rather not use `const` to avoid having compat issues with N 6.x and earlier.
-            var options = {
-                hostname: 'bans.discordlist.net',
-                port: 443,
-                path: '/api',
-                method: 'GET',
-                headers: {'user-agent': 'DBansJS/1.0 (+https://github.com/KakolIsSomewhatGay/dbansJS/)'}
-            };
+            if (object == undefined) {new Error("DBansJS Invalid Params", "You must now pass the following when calling dbans.update: {'token': 'dbanstoken'}")}
 
-            var r = https.request(options, (res) => {
-                var ofString = ''
+            var opt = {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'user-agent': 'DBansJS/' + version + ' (+https://github.com/KakolIsSomewhatGay/dbansJS/)'
+            }
 
-                res.on('data', function (d) {
-                    ofString += d
-                });
-
-                res.on('end', function () {
-                    dbans['list'] = ofString.replace(' ', '')
-                    try {if (callback !== undefined) {callback()}} catch(e){}
-                });
-
+            var data = {"token": object.token}
+            needl.post('https://bans.discordlist.net/api', data, opt, function(err, resp) {
+                if (err) {new Error(err)} else {
+                    if (resp.body.includes("No token specified!") == true) {
+                        new Error("The token you specified was invalid according to the API. Contact Silicon")
+                    } else if (resp.body.includes("Invalid token.") == true) {
+                        new Error("The token you specified was invalid according to the API. Contact Silicon")
+                    } else {
+                        dbans['list'] = resp.body.replace(' ', '')
+                        try {if (callback !== undefined) {callback()}} catch(e){}
+                    }
+                }
             });
 
-            r.on('error', (e) => {
-                console.error(e);
-            });r.end();
         }
 
         dbans.lookup = function LookupID(id, callback) {
 
-            if (!dbans.bans.list) {dbans.update()}
-            if (!callback) {
-                var toRET = JSON.stringify(dbans['list']).includes("['" + id + "']")
-                if (toRET.toString == true) {
-                    return true
-                } else if (toRET.toString == false) {
-                    return false
-                } else {
-                    return toRET
-                }
-            } else if (callback) {
-                var toRET = JSON.stringify(dbans['list']).includes("['" + id + "']")
-                if (toRET.toString == "true") {
-                    callback(true)
-                } else if (toRET.toString == "false") {
-                    callback(false)
-                } else {
-                    callback(toRET)
-                }
-            }            
+            if (dbans['list'] == undefined) {new Error("DBansJS is not ready", "Call dbans.update before looking up users.")}
+
+            // COMMENCE GLORIFIED INCLUDES!!!!!!!!!!!!
+            var temp = dbans['list'].includes(id.toString('utf-8'))
+            if (temp == true) {
+                if (callback) {callback(true)} else {return true}
+            } else {
+                if (callback) {callback(false)} else {return false}
+            }
+
+            return false // How the hell are we here?
+
         }
 
         module.exports = dbans
