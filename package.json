@@ -1,6 +1,6 @@
 {
   "name": "dbansjs",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A Simple and easy way to lookup banned Discord users on DiscordBans.",
   "main": "index.js",
   "scripts": {
@@ -25,6 +25,11 @@
   "bugs": {
     "url": "https://github.com/KakolIsSomewhatGay/dbansJS/issues"
   },
+
+  "dependencies": {
+    "needle": "^1.6.x",
+  },
+
   "homepage": "https://github.com/KakolIsSomewhatGay/dbansJS/blob/master/README.md",
   "author": "KakolIsGay"
 }
