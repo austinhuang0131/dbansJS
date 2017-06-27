@@ -6,17 +6,8 @@
         //var https = require("https");       // I gave up with both of these options
         //var qstri = require('querystring'); // so I'll just use needle instead
         var needl = require('needle');
-        var version = "0.1.2" // For tracking
-
-        try { if (discordbans == undefined) {
-            dbans = {}
-            dbans.bans = {}
-            discordbans = dbans
-        }} catch(e) {
-            dbans = {}
-            dbans.bans = {}
-            discordbans = dbans
-        }
+        var version = "0.1.3" // For tracking
+        var dbans = {}
 
         dbans.update = function LookupUDCache(object, callback) {
 
@@ -35,7 +26,7 @@
                     } else if (resp.body.includes("Invalid token.") == true) {
                         new Error("The token you specified was invalid according to the API. Contact Silicon")
                     } else {
-                        dbans['list'] = resp.body.replace(' ', '')
+                        dbans['list'] = resp.body.replace(/ /g, '')
                         try {if (callback !== undefined) {callback()}} catch(e){}
                     }
                 }
